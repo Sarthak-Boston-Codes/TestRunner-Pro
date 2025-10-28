@@ -20,6 +20,7 @@ jobs:
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: testrunner_test
+          POSTGRES_USER: postgres
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -30,21 +31,43 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
+      
       - run: npm ci
-      - run: npm run db:migrate
+      
+      - name: Setup test database
+        run: |
+          PGPASSWORD=postgres psql -h localhost -U postgres -d testrunner_test -c "
+          CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            email VARCHAR(255) UNIQUE NOT NULL,
+            password_hash VARCHAR(255) NOT NULL,
+            name VARCHAR(255) NOT NULL,
+            username VARCHAR(100) UNIQUE NOT NULL,
+            avatar VARCHAR(500),
+            phone VARCHAR(50),
+            status VARCHAR(50) DEFAULT 'active',
+            role VARCHAR(50) DEFAULT 'user',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          );
+          CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+          CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
+          "
+      
+      - name: Run tests with coverage
+        run: npm run test:coverage
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/testrunner_test
+          TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/testrunner_test
           NODE_ENV: test
-      - run: npm run test:coverage
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/testrunner_test
-          NODE_ENV: test
-          JWT_SECRET: test_secret_key
-      - name: Upload coverage
+          JWT_SECRET: test_secret_key_for_ci
+          
+      - name: Upload coverage reports
         uses: codecov/codecov-action@v3
         with:
           files: ./coverage/coverage-final.json
+          flags: javascript
