@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\sarth\TestRunner-Pro\cpp\build\CMakeFiles\02e2fda6aab09510a1268455940746ec\RUN_TESTS_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{016DB00F-F26D-3322-8543-A92A2A9490BB}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
