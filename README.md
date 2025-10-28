@@ -258,7 +258,7 @@ DATABASE_URL=postgresql://testrunner_user:testpass123@localhost:5432/testrunner_
 TEST_DATABASE_URL=postgresql://testrunner_user:testpass123@localhost:5432/testrunner_test
 JWT_SECRET=your_secret_key
 ```
- 
+
 ### Step 3: Setup Database
 ```bash
 # Create databases
@@ -984,7 +984,7 @@ Debug\memory_tests.exe    # Run memory tests
 ##  Contact & Support
 
 **Project Lead:** Sarthak Sargar
-**Email:** sarthakmsargar@gmail.com 
+**Email:** sarthakmsargar@gmail.com
 **GitHub:** https://github.com/Sarthak-Boston-Codes/TestRunner-Pro
 
 ---
